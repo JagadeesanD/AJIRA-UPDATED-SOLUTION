@@ -1,0 +1,101 @@
+a=[]
+def jaga(b,c):
+    if b!="COMPUTER"  and b!="REPEATER":
+        return "ERROR:Invalid device tpye"
+    if c in a:
+        return "ERROR:Name already exists"
+    a.append(c)
+    return f"Sucessfully added {c}"
+def jack (c,strenght):
+    if c not in a:
+        return "Error:Device not found"
+    if not strenght.isnumeric():
+        return "Error:Invalid command synatx"
+    return f"Sucessfully set strenght for{c}"
+print(jaga("COMPUTER","A1"))
+print(jaga("COMPUTER","A2"))
+print(jaga("COMPUTER","A3"))
+print(jaga("COMPUTER","A1"))
+print(jaga("COMPUTER","A4"))
+print(jaga("COMPUTER","A5"))
+print(jaga("COMPUTER","A6"))
+print(jaga("REPEATER","R1"))
+print(jaga("PHONE","A1"))
+
+
+
+connected_devices = {}
+MAX_DEVICE_ID = 5
+
+def connect(device1, device2):
+    if not device1 or not device2:
+        return "Error: Invalid device name."
+    if not (1 <= int(device1[1:]) <= MAX_DEVICE_ID) or not (1 <= int(device2[1:]) <= MAX_DEVICE_ID):
+        return "Error: Node not found."
+    if device1 == device2:
+        return "Error: Cannot connect device to itself."
+    if device1 in connected_devices:
+        if device2 in connected_devices[device1]:
+            return "Error: Devices are already connected."
+        connected_devices[device1].append(device2)
+    else:
+        connected_devices[device1] = [device2]
+    return "Successfully connected."
+
+print(connect("A1", "A2"))
+print(connect("A1", "A3"))
+print(connect("A1", "A1"))
+print(connect("A1", "A2"))
+print(connect("A5", "A4"))
+print(connect("R1", "A2"))
+print(connect("R1", "A5"))
+print(connect("A1", ""))
+print(connect("", ""))
+print(connect("A8", "A1"))
+print(connect("A2", "A4"))
+
+
+
+def get_route(src, dest):
+    nodes = {
+        "A1": ["A2","A3"],
+        "A2": ["A1", "A4", "R1"],
+        "A3": ["A1"],
+        "A4": ["A2"],
+        "R1": ["A5"],
+        "A5": []
+    }
+
+    if src not in nodes:
+        return "Error: Source node not found!"
+    if dest not in nodes:
+        return "Error: Root  not found!"
+    if dest[0] == 'R':
+        return "Error: Route cannot be calculated with a repeater."
+    if src == dest:
+        return f"{src}->{dest}"
+
+    queue = [(src, [src])]
+    while queue:
+        (node, path) = queue.pop(0)
+        for neighbor in nodes[node]:
+            if neighbor == dest:
+                return " -> ".join(path + [dest])
+            if neighbor not in path:
+                queue.append((neighbor, path + [neighbor]))
+    return "Error: Route not found!"
+
+print(get_route("A1", "A4"))
+print(get_route("A1", "A5"))
+print(get_route("A4", "A3"))
+print(get_route("A1", "A1"))
+print(get_route("A1", "A6"))
+print(get_route("A2", "R1"))
+
+print(get_route("A1", "A10"))
+
+
+#executed using the python 
+#solution updated
+
+
